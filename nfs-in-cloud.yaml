@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: NFS ~100 files migration Demo (on-cloud)
+
+Resources:
+  s3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      BucketName: !Join
+      - "-"
+      - - "hundred-files-nfs"
+        - !Select
+          - 2
+          - !Split
+            - "/"
+            - !Ref "AWS::StackId"
+            
+  s3BucketIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - datasync.amazonaws.com
+        Version: '2012-10-17'
+  s3BucketRolePolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: s3Bucket
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Resource: !GetAtt s3Bucket.Arn
+            Action:
+              - s3:GetBucketLocation
+              - s3:ListBucket
+              - s3:ListBucketMultipartUploads
+              - s3:HeadBucket
+          - Effect: Allow
+            Resource: !Join [ "/", [ !GetAtt s3Bucket.Arn, "*" ] ]
+            Action:
+              - s3:AbortMultipartUpload
+              - s3:DeleteObject
+              - s3:GetObject
+              - s3:ListMultipartUploadParts
+              - s3:PutObject
+        Version: '2012-10-17'
+      PolicyName: policy
+      Roles:
+        - !Ref 's3BucketIamRole'
+
+  dataSyncLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 3
+      LogGroupName: !Join
+        - ''
+        - - DataSyncLogs-
+          - !Ref 'AWS::StackName'
+
+Outputs:
+  bucketName:
+    Description: S3 Bucket Name
+    Value: !Ref 's3Bucket'
+  bucketRoleForDataSync:
+    Description: S3 Bucket Role for DataSync
+    Value: !Ref 's3BucketIamRole'
