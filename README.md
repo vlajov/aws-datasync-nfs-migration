@@ -5,8 +5,8 @@ This repository contains AWS CloudFormation templates to migrate ~100 small text
 
 ## Repository Contents
 
-- `source-vpc-template.yaml`: Deploys VPC, subnet, route table, security groups, and three t3.medium EC2 instances (NFS server, two DataSync agents) in us-east-1. ([Link](#))
-- `destination-s3-template.yaml`: Creates an S3 bucket and IAM role for DataSync in us-east-2. ([Link](#))
+- [nfs-on-prem+t3.medium.yaml](nfs-on-prem+t3.medium.yaml): Deploys VPC, subnet, route table, security groups, and three t3.medium EC2 instances (NFS server, two DataSync agents) in us-east-1. ([Link](#))
+- [nfs-in-cloud.yaml](nfs-in-cloud.yaml): Creates an S3 bucket and IAM role for DataSync in us-east-2. ([Link](#))
 - `README.md`: This file.
 
 ## Purpose
