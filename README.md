@@ -1,4 +1,4 @@
-# aws-datasync-nfs-migration
+# Migrating NFS with AWS DataSync 
 Automate AWS DataSync infrastructure with CloudFormation to migrate data across VPCs using NFS and S3—efficient and low-cost
 
 This repository contains AWS CloudFormation templates to migrate ~100 small text files from an NFS server to an Amazon S3 bucket using AWS DataSync, as described in my [LinkedIn article](https://www.linkedin.com/pulse/setting-up-aws-datasync-migration-infrastructure-vladimir-jovanovski-ejm8f/?trackingId=1SHn9jBmlVBXmQEhIgW8Pg%3D%3D). The setup spans two regions: us-east-1 for the source (VPC, NFS server, two DataSync agents) and us-east-2 for the destination (S3 bucket, IAM role).
